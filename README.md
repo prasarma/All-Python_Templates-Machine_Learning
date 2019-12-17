@@ -1,6 +1,5 @@
-# All Machine Learning Templates (Seaborn,K fold, Grid Search, Random Search,AUC-ROC for all major algorithms)
-
-I have created below templates so i can compete in different Data Science contests on Kaggle and Analytics Vidhya. By using below templates i will utilize my time into EDA only. below repositories contains all information required into machine learning.
+H2O.ai(Auto-ML)
+Currently i am using H2O libraries in my professional and personal projects. i am putting some projects (Kaggle and Analytics vidhya) here.
 
 
 # All Machine Learning Templates (Seaborn,K fold, Grid Search, Random Search,AUC-ROC for all major algorithms)
