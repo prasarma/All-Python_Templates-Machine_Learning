@@ -1,0 +1,275 @@
+General Commands
+
+#  Import All Important Libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from numpy import nan
+
+
+#  Input Train Data Set
+dataset_train=pd.read_csv("train_2.csv")
+
+
+#  Input Test Data Set
+dataset_test=pd.read_csv("test_2.csv")
+
+
+#  Input Test prediction values
+dataset_finaltest=pd.read_csv("sample_submission_2.csv")
+
+
+# Checking the Columns  Names
+dataset_train.columns
+dataset_test.columns
+
+
+# Checking columns names with data types
+dataset_train.dtypes
+dataset_test.dtypes
+
+
+#checking the shape of data(Column,Row)
+dataset_train.shape
+dataset_test.shape
+
+
+#checking the size of data(Column * Row),total elements in data
+dataset_train.size
+dataset_test.size
+
+
+# Check the Data count and first five columns to understand the data points
+dataset_train.describe()     # gives count,mean,std dev
+dataset_train.describe(include = 'all')
+dataset_train.Outlet_Size.describe()
+dataset_train['Outlet_size'].describe()
+
+
+#Check the data types and other information of data
+dataset_train.info()		# gives columns names and data type
+
+# Check mean,mode and median of a column
+dataset_train['Outlet_Size'].mode()[0]
+dataset_train['Item_Visibility'].mean()
+dataset_train['Item_Visibility'].median()
+
+
+
+# Check the data head values
+dataset_train.head()
+dataset_train['Item_Weight'].head()
+dataset_train.Item_Weight.head(10)
+
+
+# Check the data tail values
+dataset_train.tail()
+dataset_train['Item_Weight'].tail()
+dataset_train.Item_Weight.tail(10)
+
+
+# Check null columns in Train and Test data
+dataset_train.isnull().sum()
+dataset_test.isnull().sum()
+
+
+# Taken care for missing data for Train data
+dataset_train['Loan_Amount_Term'].fillna(dataset_train['Loan_Amount_Term'].mode()[0], inplace=True)
+dataset_train['LoanAmount'].fillna(dataset_train['LoanAmount'].median(), inplace=True)
+dataset_train['Item_Weight'].fillna(dataset_train['Item_Weight'].mean(), inplace=True)
+
+test['Outlet_Size'] = test['Outlet_Size'].fillna('Medium')
+
+
+
+# Adding new variables to the data
+dataset_train['Total_Income']=dataset_train['ApplicantIncome']+dataset_train['CoapplicantIncome']
+dataset_test['Total_Income']=dataset_test['ApplicantIncome']+dataset_test['CoapplicantIncome']
+
+
+# Maximum values passes from different columns to one column
+cols = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10', 'm11', 'm12']
+dataset_train['max_deliq'] = dataset_train[cols].max(axis=1)
+
+
+#Applying lambda function on a column
+dataset_train['m12_new'] = dataset_train['m12'].apply(lambda x: 1 if x > 0 else 0)
+
+# Create 4 MRP Categories  (Handling for if else condition with one function)
+x1=68
+x2=135
+x3=200
+def price_cat(x):
+    if x <= x1:
+        return 0
+    elif (x > x1) & (x <= x2):
+        return 1
+    elif (x > x2) & (x <= x3):
+        return 2
+    else:
+        return 3
+
+dataset_train['Item_MRP_Category'] = dataset_train['Item_MRP']
+dataset_train['Item_MRP_Category'] = dataset_train['Item_MRP_Category'].apply(price_cat)
+dataset_train['Item_MRP_Category'].value_counts()
+
+
+
+#Using iloc function 
+cols=['interest_rate', 'unpaid_principal_bal', 'loan_to_value','number_of_borrowers', 'debt_to_income_ratio', 'borrower_credit_score',
+      'source_new','max_deliq' ,'m11', 'm12']                                                   
+dataset_train = df1.iloc[:116058,:][cols]
+
+
+#Adding New column in the dataset to identify the source of data 
+dataset_train['source']='train'
+dataset_test['source']='test'
+
+data=pd.concat([dataset_train,dataset_test],ignore_index=True)
+
+
+
+# Take log of some column
+dataset_train['Total_Income_log'] = np.log(dataset_train['Total_Income'])
+dataset_test['Total_Income_log'] = np.log(dataset_test['Total_Income'])
+
+
+# Creating bins for a numerical value (age,visibility)
+train['Item_Visibility_bins'] = pd.cut(train['Item_Visibility'], [0.000, 0.065, 0.13, 0.2], labels=['Low Viz', 'Viz', 'High Viz'])
+
+
+
+# Doing Group By with some column
+dataset_train.groupby('Gender').Loan_Status.value_counts(normalize=True)
+
+
+# Checking the value count of a column value (output: Y    422 N    192)
+dataset_train['Loan_Status'].value_counts()
+dataset_train.Loan_Status.value_counts()
+
+
+# Checking the value count of a column value percentage wise (Y    0.6876 N    0.31270)
+dataset_train['Loan_Status'].value_counts(normalize=True)
+dataset_train.Loan_Status.value_counts(normalize=True)
+
+
+#dropping columns
+dataset_train=dataset_train.drop(['Loan_ID','ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term'], axis=1) 
+dataset_test=dataset_test.drop(['Loan_ID','ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term'], axis=1)
+
+
+# Replace N with 0 and Y with 1 or vice versa
+y_train.replace('N',0,inplace=True) 
+y_train.replace('Y',1,inplace=True)   # y_train=y_train.replace('Y',1,)
+
+train['Item_Visibility_bins'] = train['Item_Visibility_bins'].replace(NaN, 'Low Viz')
+train['Item_Fat_Content'] = train['Item_Fat_Content'].replace(['low fat', 'LF'], 'Low Fat')
+
+
+
+# Creating Label Encoder ( genders male ,female ⇒ 0,1)
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+dataset_train['Item_Fat_Content'] = le.fit_transform(dataset_train['Item_Fat_Content'])
+dataset_train['Item_Visibility_bins'] = le.fit_transform(dataset_train['Item_Visibility_bins'])
+dataset_train['Outlet_Size'] = le.fit_transform(dataset_train['Outlet_Size'])
+dataset_train['Outlet_Location_Type'] = le.fit_transform(dataset_train['Outlet_Location_Type'])
+
+# Using SMOTE for unbalanced data points
+from imblearn.over_sampling import SMOTE 
+sm = SMOTE(random_state = 2) 
+x_train, y_train = sm.fit_sample(x_train, y_train) 
+
+
+https://www.geeksforgeeks.org/ml-handling-imbalanced-data-with-smote-and-near-miss-algorithm-in-python/
+
+
+# Create dummy variables for all the categoricals columns (Gender ⇒ male,female)
+dataset_train=pd.get_dummies(dataset_train) 
+dataset_test=pd.get_dummies(dataset_test)
+
+
+# Create dummy variables for the columns for single columns and append it to the data
+dataset_train = pd.concat([dataset_train, pd.get_dummies(dataset_train['Sex'], prefix='sex_')], axis=1)
+dataset_test = pd.concat([dataset_test, pd.get_dummies(dataset_test['Sex'], prefix='sex_')], axis=1)
+
+
+
+
+# Feature Scaling
+# Doing Standardization of data Using Standard Scaler (Z-score, u=0 sigma =1)
+from sklearn.preprocessing import StandardScaler
+sc_x = StandardScaler()
+x = sc_x.fit_transform(x)
+x = pd.DataFrame(x, columns = dataset_train.columns)
+x_test=sc_x.transform(x_test)
+x_test = pd.DataFrame(x_test, columns = dataset_test.columns)
+
+
+
+# Feature Scaling
+# Doing Normalization of data using MinMaxScaler     (x’=x-min(x)/ max(x)-min(x))
+from sklearn.preprocessing import MinMaxScaler
+min_max=MinMaxScaler()
+x=min_max.fit_transform(x)
+x = pd.DataFrame(x, columns = dataset_train.columns)
+
+x_test = min_max.fit_transform(x_test)
+x_test = pd.DataFrame(x_test, columns = dataset_test.columns)
+
+
+# Standardizing the train and test data
+from sklearn.preprocessing import scale
+x_train_scale=scale(x_train[['ApplicantIncome', 'CoapplicantIncome',
+                'LoanAmount', 'Loan_Amount_Term', 'Credit_History']])
+x_test_scale=scale(x_test[['ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term', 'Credit_History']])
+
+
+#Concat train and test data into one dataset
+train['source']='train'
+test['source']='test'
+data = pd.concat([train, test],ignore_index=True)
+
+#Divide into test and train
+train = data.loc[data['source']=="train"]
+test = data.loc[data['source']=="test"]
+
+
+# Preparing x and y 
+y=dataset_train.Survived  
+x=dataset_train.drop(['Survived'],axis=1)
+
+#splitting the data into Training and Testing Data
+from sklearn.model_selection import train_test_split
+x_train,x_cv,y_train,y_cv=train_test_split(x,y,test_size=0.3,random_state=0)
+
+
+
+#Export files as modified versions:
+train.to_csv("train_modified.csv",index=False)
+test.to_csv("test_modified.csv",index=False)
+
+
+#Change the date and time in below columns
+dataset_train['impression_time']  =  pd.to_datetime(dataset_train['impression_time'])  
+
+dataset_train['impression_weekday'] = dataset_train['impression_time'].dt.weekday
+dataset_train['impression_day']    = dataset_train['impression_time'].dt.day
+dataset_train['impression_month']  = dataset_train['impression_time'].dt.month
+dataset_train['impression_year']   = dataset_train['impression_time'].dt.year
+dataset_train['impression_hour']    = dataset_train['impression_time'].dt.hour
+dataset_train['impression_minutes']  =  dataset_train['impression_time'].dt.minute
+dataset_train['impression_seconds']   =  dataset_train['impression_time'].dt.second
+
+
+dataset_test['impression_time']  =  pd.to_datetime(dataset_test['impression_time'])  
+
+dataset_test['impression_weekday'] = dataset_test['impression_time'].dt.weekday
+dataset_test['impression_day']    = dataset_test['impression_time'].dt.day
+dataset_test['impression_month']  = dataset_test['impression_time'].dt.month
+dataset_test['impression_year']   = dataset_test['impression_time'].dt.year
+dataset_test['impression_hour']    = dataset_test['impression_time'].dt.hour
+dataset_test['impression_minutes']  =  dataset_test['impression_time'].dt.minute
+dataset_test['impression_seconds']   =  dataset_test['impression_time'].dt.second
+
