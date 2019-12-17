@@ -8,4 +8,3 @@ This repositories contains all kind of templates which we can code in python mac
 2. EDA Template - This file contains all operation which requires in exploratory data analysis
 3. ML Classification - This file contains all classification algorithms templates like  (Logistic Regression,CatBoost) with                  normal ,kfold,Grid search and random search variations.
 4. ML Regression  - This file contains all regression algorithms templates like  (Linear Regression,Random Forest) with                    normal ,kfold,Grid search and random search variations.
-
