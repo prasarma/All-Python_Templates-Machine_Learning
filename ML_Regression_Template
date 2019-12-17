@@ -1,0 +1,729 @@
+             		  #Machine Learning Model (General)..       
+
+     # Link for different types of scores
+    #  https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter                      
+
+
+# 1. Fitting Simple Linear Regression to the Training Set
+from sklearn import linear_model
+regressor_linreg = linear_model.LinearRegression()
+regressor_linreg.fit(x_train, y_train)
+
+# Predicting the Test set results
+y_pred_linreg = regressor_linreg.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_linreg=mean_squared_error(y_cv, y_pred_linreg)
+
+
+
+
+# 2. Fitting Simple Linear Regression(LASSO) to the Training Set
+from sklearn import linear_model
+regressor_lasso = linear_model.LassoCV()
+regressor_lasso.fit(x_train, y_train)
+
+# Predicting the Test set results
+y_pred_laaso = regressor_lasso.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_laaso=mean_squared_error(y_cv, y_pred_laaso)
+
+
+
+# 3. Fitting Simple Linear Regression(LASSO) to the Training Set
+from sklearn import linear_model
+regressor_ridge = linear_model.Ridge()
+regressor_ridge.fit(x_train, y_train)
+
+# Predicting the Test set results
+y_pred_ridge = regressor_ridge.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_ridge=mean_squared_error(y_cv, y_pred_ridge)
+
+
+
+# 4. Fitting SVR - Linear to Training Set
+
+from sklearn.svm import SVR
+regressor_svr_lin = SVR(kernel='linear')
+regressor_svr_lin.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_svr_lin = regressor_svr_lin.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_svr_lin=mean_squared_error(y_cv, y_pred_svr_lin)
+
+
+
+# 5. Fitting SVR - Gaussian RBF to Training Set
+
+from sklearn.svm import SVR
+regressor_svr_rbf = SVR(kernel = 'rbf')
+regressor_svr_rbf.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_svr_rbf = regressor_svr_rbf.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_svr_rbf=mean_squared_error(y_cv, y_pred_svr_rbf)
+
+
+
+# 6. Fitting Desicion Tree to Training Set
+
+from sklearn.tree import DecisionTreeRegressor
+regressor_dectree = DecisionTreeRegressor(random_state = 0)
+regressor_dectree.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_dectree = regressor_dectree.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_dectree=mean_squared_error(y_cv, y_pred_dectree)
+
+
+
+
+# 7. Fitting Random Forest to Training Set
+
+from sklearn.ensemble import RandomForestRegressor
+regressor_rf = RandomForestRegressor(n_estimators = 10, random_state = 0)
+regressor_rf.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_rf = regressor_rf.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_rf=mean_squared_error(y_cv, y_pred_rf)
+
+
+# 8. Fitting ADA BOOST to Training Set
+
+from sklearn.ensemble import AdaBoostRegressor
+regressor_ada = AdaBoostRegressor(n_estimators = 10, random_state = 0)
+regressor_ada.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_ada = regressor_ada.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_ada=mean_squared_error(y_cv, y_pred_ada)
+
+
+
+
+
+
+# 9. Fitting XG BOOST to Training Set
+from xgboost.sklearn import XGBRegressor
+regressor_xgb = XGBRegressor()
+regressor_xgb.fit(x_train, y_train)
+
+# Predicting the test result
+y_pred_xgb = regressor_xgb.predict(x_cv)
+
+# Score for Linear Regression
+from sklearn.metrics import mean_squared_error
+score_xgb=mean_squared_error(y_cv, y_pred_xgb)
+
+
+
+
+
+
+
+                            # MACHINE LEARNING (K FOLD)
+                            
+                            
+scoring_mech= 'neg_mean_squared_error'
+cross_val = 10                            
+                            
+# 1. Linear Regression with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = linear_model.LinearRegression()
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_linreg_kfold=abs(scores.mean())
+
+
+
+# 2. Linear Regression LASSO with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = linear_model.Lasso()
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_lasso_kfold=abs(scores.mean())
+
+
+# 3. Linear Regression RIDGE with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = linear_model.Ridge()
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_ridge_kfold=abs(scores.mean())
+
+# 4. Support Vector Machine - LINEAR with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = SVR(kernel='linear')
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_svr_lin_kfold=abs(scores.mean())
+
+
+
+# 5. Support Vector Machine - GAUSSIAN RBF with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = SVR(kernel='rbf')
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_svr_rbf_kfold=abs(scores.mean())
+
+
+# 6. Decision Tree with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = DecisionTreeRegressor(random_state=0)
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_dectree_kfold=abs(scores.mean())
+
+
+# 7. Random Forest with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = RandomForestRegressor(random_state=0)
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_rf_kfold=abs(scores.mean())
+
+# 8. ADA Boost with K fold validation
+            
+from sklearn.model_selection import cross_val_score
+clf = AdaBoostRegressor()
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_ada_kfold=abs(scores.mean())
+
+# 9. XG Boost with K fold validation
+
+from xgboost.sklearn import XGBRegressor           
+from sklearn.model_selection import cross_val_score
+clf = XGBRegressor()
+scores = cross_val_score(clf, x, y,scoring=scoring_mech, cv=cross_val)  
+score_xgb_kfold=abs(scores.mean())
+
+
+
+            
+
+
+                            #GRID SEARCH
+                            
+                            
+
+
+scoring_mech= 'neg_mean_squared_error'
+cross_validation_value= 10
+
+# 1. Grid Search with Linear Regression Linear Search
+from sklearn import linear_model            
+from sklearn.model_selection import GridSearchCV
+parameters = {}
+regressor_linreg = linear_model.LinearRegression()
+grid_search_linreg = GridSearchCV(estimator = regressor_linreg,
+                           param_grid = parameters,
+                           scoring =scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_linreg = grid_search_linreg.fit(x, y)
+score_linreg_gridsearch= abs(grid_search_linreg.best_score_)
+bestparam_linreg_grid = grid_search_linreg.best_params_
+
+
+# 2. Grid Search with Linear Regression LASSO
+from sklearn import linear_model            
+from sklearn.model_selection import GridSearchCV
+parameters = [{'alpha': [1],   #eps, positive float, (.001,1000)
+               'copy_X' : [True], #same
+              'fit_intercept':[True], # Boolean, default:True
+              'max_iter':[1000],#Iteration, (1,1000)
+              'normalize':[False], # Boolean, default:False
+              'positive':[False],#same
+              'precompute':[False], # (True,False,auto (best))
+              'random_state':[None], #same
+              'selection':['cyclic'],#same
+              'tol':[0.001] # positive float ,(0 1), 
+             }]
+regressor_lasso = linear_model.Lasso()
+grid_search_lasso = GridSearchCV(estimator = regressor_lasso,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_lasso = grid_search_lasso.fit(x, y)
+score_lasso_gridsearch= abs(grid_search_lasso.best_score_)
+bestparam_lasso_grid = grid_search_lasso.best_params_
+
+
+
+# 3. Grid Search with Linear Regression RIDGE
+
+from sklearn import linear_model            
+from sklearn.model_selection import GridSearchCV
+parameters = [{'alpha': [1], # positive float (.001,1000)
+               'copy_X' : [True], # same
+              'fit_intercept':[True], # Boolean, default:True
+              'max_iter':[None], # int (1,1000)
+              'normalize':[False],# Boolean, default:False
+              'solver':['auto'], # solver : {‘auto’, ‘svd’, ‘cholesky’, ‘lsqr’, ‘sparse_cg’, ‘sag’, ‘saga’}
+              'tol':[0.001]
+             }]
+regressor_ridge = linear_model.Ridge()
+grid_search_ridge = GridSearchCV(estimator = regressor_ridge,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_ridge = grid_search_ridge.fit(x, y)
+score_ridge_gridsearch= abs(grid_search_ridge.best_score_)
+bestparam_ridge_grid = grid_search_ridge.best_params_
+
+
+
+
+# 4. Grid Search with DecisionTree
+from sklearn.tree import DecisionTreeRegressor            
+from sklearn.model_selection import GridSearchCV
+
+parameters = [{'criterion': ['mse'], # {'mse','mae','friedman_mse',}
+               'max_depth': [None], # int, {None,or int value}
+               'max_features': [None], # same
+               'max_leaf_nodes': [None], # int, {None,or int value}
+               'min_impurity_decrease': [0.0],# float ,default = .0001 
+               'min_impurity_split': [None], # float ,default = 0
+               'min_samples_leaf' : [1], # int ,default = 1
+               'min_samples_split' : [2], # int ,default = 2
+               'min_weight_fraction_leaf' : [0.0], # int ,default = 0
+               'presort' : [False], # Boolean , default= False
+               'splitter':['best'] #{'best','random'}
+               }]
+regressor_dectree = DecisionTreeRegressor(random_state=0)
+grid_search_dectree = GridSearchCV(estimator = regressor_dectree,
+                                   param_grid = parameters,
+                                   scoring = scoring_mech,
+                                   cv = cross_validation_value,
+                                   n_jobs = -1)
+grid_search_dectree = grid_search_dectree.fit(x, y)
+score_dectree_gridsearch= abs(grid_search_dectree.best_score_)
+bestparam_dectree_grid = grid_search_dectree.best_params_
+
+
+
+
+# 5. Grid Search with Random Forest
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import GridSearchCV
+
+parameters = [{'criterion': ['mse'], # {'mse','mae'}
+               'max_depth': [None],# int, {None,or int value}
+               'max_features': ['auto'], #same
+               'max_leaf_nodes': [None],# int, {None,or int value}
+               'min_impurity_decrease': [0], # float, default =0
+               'min_impurity_split': [None], # float ,default = 0.0001
+               'min_samples_leaf' : [1], # int ,default = 1
+               'min_samples_split' : [2], # int ,default = 2
+               'min_weight_fraction_leaf' : [0], # float ,default = 0
+               'n_estimators': [100]  # no of trees, default = 10
+               }]
+regressor_rf = RandomForestRegressor(random_state = 0)
+grid_search_rf = GridSearchCV(estimator = regressor_rf,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_rf = grid_search_rf.fit(x, y)
+score_rf_gridsearch= abs(grid_search_rf.best_score_)
+bestparam_rf_grid = grid_search_rf.best_params_
+
+
+
+
+# 6. Grid Search with ADA BOOST
+from sklearn.ensemble import AdaBoostRegressor   
+from sklearn.model_selection import GridSearchCV
+
+parameters = [{'base_estimator' : [None],              
+              'learning_rate': [.1], # default =1 
+              'loss': ['linear', 'square', 'exponential'],# {‘linear’, ‘square’, ‘exponential’}, default = linear
+              'n_estimators': [60], # default = 50 
+              }]
+regressor_ada = AdaBoostRegressor(random_state = 0)
+grid_search_ada = GridSearchCV(estimator = regressor_ada,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_ada = grid_search_ada.fit(x, y)
+score_ada_gridsearch= abs(grid_search_ada.best_score_)
+bestparam_ada_grid = grid_search_ada.best_params_
+
+
+# 7. Grid Search with XG BOOST
+from xgboost.sklearn import XGBRegressor 
+from sklearn.model_selection import GridSearchCV
+
+parameters = [{'objective':['reg:linear'],
+              'learning_rate': [0.1], #eta range()
+              'max_depth': [3], # max_depth range(1,15)
+              'min_child_weight': [1], # min_child_weight range(0,7)
+              'subsample': [1], #subsample (.1,1)
+              'colsample_bytree': [1], # colsample_bytree(0,1)
+              'colsample_bylevel': [1], # colsample_bytree(0,1)
+              'n_estimators': [51,55,60],# nrounds(1,5000)
+              'reg_alpha':[493,795],# (1,1000)
+              'reg_lambda':[31],# (1,1000)
+              'min_split_loss':[0],
+              'booster': ['gbtree','dart'] # (‘gbtree’,’dart’,gloss)
+              }]          
+
+regressor_xgb = XGBRegressor()
+grid_search_xgb = GridSearchCV(estimator = regressor_xgb,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_xgb = grid_search_xgb.fit(x, y)
+score_xgb_gridsearch= abs(grid_search_xgb.best_score_)
+bestparam_xgb_grid = grid_search_xgb.best_params_
+
+
+
+# 8. Grid Search with SVR (Linear,Polynomial,Sigmoid, RBF Gaussian)
+from sklearn.svm import SVR
+from sklearn.model_selection import GridSearchCV
+parameters = [{'kernel':['linear','poly','sigmoid','rbf'], #{'linear','poly','sigmoid','rbf'}
+              'coef0' : [0], # float, default = 0
+              'tol' : [.001], #float, default = 0.001
+              'degree':[], # used in poly ,ignored by other kernels
+              'gamma': [0.0001, 0.001], # float,default= 'auto'
+              'C': [0.1, 1], # float, default = 1
+              'epsilon': [0.0001, 0.0005, ],# float default = 0.1    
+        }]
+regressor_svr =SVR(kernel='linear')
+grid_search_svr = GridSearchCV(estimator = regressor_svr,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_svr = grid_search_svr.fit(x, y)
+score_svr_gridsearch= abs(grid_search_svr.best_score_)
+bestparam_svr_grid = grid_search_svr.best_params_
+
+# 9. Grid Search with LIGHT_GadientBoostingM
+
+from lightgbm import LGBMRegressor
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+'boosting_type':['gbdt'],# {'gbdt','dart','rf','goss'}
+'class_weight':[None], # same
+'colsample_bytree' : [1],# float,default : 1
+'importance_type':['split'], # same
+'learning_rate':[0.1],# float ,default =.1
+'max_depth':[-1], # int ,default = -1
+'min_child_samples' : [20], # int , default = 20
+'min_child_weight' : [0.001], # float, default =.0001
+'min_split_gain' : [0],# float, default = 0
+'n_estimators'  : [100], # int  , default = 100
+'num_leaves' : [31],# int ,default= 31
+'objective' : [None],
+'random_state' : [None],# same
+'reg_alpha' : [0.0],# float, default : 0
+'reg_lambda' : [0.0],# float, default : 0
+'silent' : [True],# same
+'subsample' : [1],# float, default =1
+'subsample_for_bin' : [200000],# int ,default = 200000
+'subsample_freq' : [0] # same      
+        }
+##parameters={}
+regressor_lgbm = LGBMRegressor()
+grid_search_lgbm = GridSearchCV(estimator = regressor_lgbm,
+                           param_grid = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+grid_search_lgbm = grid_search_lgbm.fit(x, y)
+accuracy_lgbm_grid = abs(grid_search_lgbm.best_score_)
+bestparam_lgbm_grid = grid_search_lgbm.best_params_
+
+
+
+
+
+
+# 10. Grid Search with CATBoost             
+
+from catboost import CatBoostRegressor
+from sklearn.model_selection import GridSearchCV
+parameters = {
+              'loss_function':['RMSE'], #
+              'iterations' :[50],
+              'learning_rate': [0.3], # Float ,default : .03
+              'l2_leaf_reg' :[3],    #Lambda, default : 3
+             # 'bootstrap_type' : ['bayesian'],
+             # 'bagging_temperature' : [1], # default  : 1,  (0,infinity) float
+             # 'subsample':[.66],  # Float,
+             'sampling_frequency': ['PerTree','PerTreeLevel'],
+              'depth':[6], # int , default =6 , range(1,16)
+              'min_data_in_leaf' : [1], # default : 1 
+              'max_leaves' : [31], #int , default : 31 , range(1,64)  not more than 64 is recommended
+             # 'scale_pos_weight' : [1],# Float, default : 1
+            #  'boosting_type' ['Ordered'], # ['Ordered ','Plain']
+           #   'early_stopping_rounds' : [False], # int , 
+
+              }
+regressor_catb = CatBoostRegressor(eval_metric='RMSE')
+grid_search_catb = GridSearchCV(estimator = regressor_catb,
+                           param_grid = parameters,
+                           scoring=scoring_mech,
+                           cv = cross_validation_value)
+grid_search_catb = grid_search_catb.fit(x, y)
+accuracy_catb_grid = abs(grid_search_catb.best_score_)
+bestparam_catb_grid = grid_search_catb.best_params_
+
+
+
+# Random  Search CV
+                                
+     # C = uniform(loc=0, scale=4)
+    # penalty = ['l1', 'l2']         
+    # np.arange(6, 14,1, dtype=int)   
+                               
+                                
+scoring_mech= 'neg_mean_squared_error'
+cross_validation_value= 10
+
+# 1. Random Search with Linear Regression Linear Search
+from sklearn import linear_model            
+from sklearn.model_selection import RandomizedSearchCV
+parameters = {}
+regressor_linreg = linear_model.LinearRegression()
+random_search_linreg = RandomizedSearchCV(estimator = regressor_linreg,
+                           param_distributions = parameters,
+                           scoring =scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_linreg = random_search_linreg.fit(x, y)
+score_linreg_random= abs(random_search_linreg.best_score_)
+bestparam_linreg_random = random_search_linreg.best_params_
+
+
+
+# 2. Random Search with Linear Regression LASSO
+from sklearn import linear_model            
+from sklearn.model_selection import RandomizedSearchCV
+parameters = {'alpha': [1],   #eps, positive float, (.001,1000)
+              'copy_X' : [True], #same
+              'fit_intercept':[True], # Boolean, default:True
+              'max_iter':[1000],#Iteration, (1,1000)
+              'normalize':[False], # Boolean, default:False
+              'positive':[False],#same
+              'precompute':[False], # (True,False,auto (best))
+              'random_state':[None], #same
+              'selection':['cyclic'],#same
+              'tol':[0.001] # positive float ,(0 1), 
+             }
+regressor_lasso = linear_model.Lasso()
+random_search_lasso = RandomizedSearchCV(estimator = regressor_lasso,
+                           param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_lasso = random_search_lasso.fit(x, y)
+score_lasso_random= abs(random_search_lasso.best_score_)
+bestparam_lasso_random = random_search_lasso.best_params_
+
+
+
+
+# 3. Random Search with Linear Regression RIDGE
+from sklearn import linear_model            
+from sklearn.model_selection import RandomizedSearchCV
+parameters = {'alpha': [1], # positive float (.001,1000)
+               'copy_X' : [True], # same
+              'fit_intercept':[True], # Boolean, default:True
+              'max_iter':[None], # int (1,1000)
+              'normalize':[False],# Boolean, default:False
+              'solver':['auto'], # solver : {‘auto’, ‘svd’, ‘cholesky’, ‘lsqr’, ‘sparse_cg’, ‘sag’, ‘saga’}
+              'tol':[0.001]
+             }
+regressor_ridge = linear_model.Ridge()
+random_search_ridge = RandomizedSearchCV(estimator = regressor_ridge,
+                            param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_ridge = random_search_ridge.fit(x, y)
+score_ridge_random= abs(random_search_ridge.best_score_)
+bestparam_ridge_random = random_search_ridge.best_params_
+
+                       
+                                
+# 4. Random Search with DecisionTree
+from sklearn.tree import DecisionTreeRegressor            
+from sklearn.model_selection import RandomizedSearchCV
+
+parameters = {'criterion': ['mse'], # {'mse','mae','friedman_mse',}
+               'max_depth': [6], # int, {None,or int value}
+               'max_features': ['auto'], # same
+               'max_leaf_nodes': [None], # int, {None,or int value}
+               'min_impurity_decrease': [0],# float ,default = 0
+               'min_impurity_split': [1,2], # float ,default = 0.0001
+               'min_samples_leaf' : [50], # int ,default = 1
+               'min_samples_split' : [2], # int ,default = 2
+               'min_weight_fraction_leaf' : [0,0.5], # int ,default = 0
+               'presort' : [False], # Boolean , default= False
+               'splitter':['best'] #{'best','random'}
+               }
+regressor_dectree = DecisionTreeRegressor(random_state=0)
+random_search_dectree = RandomizedSearchCV(estimator = regressor_dectree,
+                                    param_distributions = parameters,
+                                   scoring = scoring_mech,
+                                   cv = cross_validation_value,
+                                   n_jobs = -1)
+random_search_dectree = random_search_dectree.fit(x, y)
+score_dectree_random= abs(random_search_dectree.best_score_)
+bestparam_dectree_random = random_search_dectree.best_params_
+
+
+# 5. Random Search with Random Forest
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import RandomizedSearchCV
+
+parameters = {'criterion': ['mse'], # {'mse','mae'}
+               'max_depth': [6],# int, {None,or int value}
+               'max_features': ['auto'], #same
+               'max_leaf_nodes': [None],# int, {None,or int value}
+               'min_impurity_decrease': [0], # float, default =0
+               'min_impurity_split': [.01], # float ,default = 0.0001
+               'min_samples_leaf' : [50], # int ,default = 1
+               'min_samples_split' : [2], # int ,default = 2
+               'min_weight_fraction_leaf' : [0], # float ,default = 0
+               'n_estimators': [1000]  # no of trees, default = 10
+               }
+regressor_rf = RandomForestRegressor(random_state = 0)
+random_search_rf = RandomizedSearchCV(estimator = regressor_rf,
+                           param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_rf = random_search_rf.fit(x, y)
+score_rf_random= abs(random_search_rf.best_score_)
+bestparam_rf_random = random_search_rf.best_params_
+
+
+# 6. Random Search with ADA BOOST
+from sklearn.ensemble import AdaBoostRegressor   
+from sklearn.model_selection import RandomizedSearchCV
+
+parameters = {'base_estimator' : [None],              
+              'learning_rate': [.1], # default =1 
+              'loss': ['linear', 'square', 'exponential'],# {‘linear’, ‘square’, ‘exponential’}, default = linear
+              'n_estimators': [60], # default = 50               
+              }
+regressor_ada = AdaBoostRegressor(random_state = 0)
+random_search_ada = RandomizedSearchCV(estimator = regressor_ada,
+                           param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_ada = random_search_ada.fit(x, y)
+score_ada_random= abs(random_search_ada.best_score_)
+bestparam_ada_random = random_search_ada.best_params_
+
+
+# 7. Random Search with XG BOOST
+
+from xgboost.sklearn import XGBRegressor 
+from sklearn.model_selection import RandomizedSearchCV
+parameters = {'objective':['reg:linear'],
+              'learning_rate': [0.1], #eta range()
+              'max_depth': [3], # max_depth range(1,15)
+              'min_child_weight': [1], # min_child_weight range(0,7)
+              'subsample': [1], #subsample (.1,1)
+              'colsample_bytree': [1], # colsample_bytree(0,1)
+              'colsample_bylevel': [1], # colsample_bytree(0,1)
+              'n_estimators': [51,55,60],# nrounds(1,5000)
+              'reg_alpha':[493,795],
+              'reg_lambda':[31],
+              'min_split_loss':[0],
+              'booster': ['gbtree','dart']
+              }
+            
+regressor_xgb = XGBRegressor()
+random_search_xgb = RandomizedSearchCV(estimator = regressor_xgb,
+                           param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_xgb = random_search_xgb.fit(x, y)
+score_xgb_random= abs(random_search_xgb.best_score_)
+bestparam_xgb_random = random_search_xgb.best_params_
+
+
+
+# 8. Random Search with SVR (Linear,Polynomial,Sigmoid, RBF Gaussian)
+from sklearn.svm import SVR
+from sklearn.model_selection import RandomizedSearchCV
+parameters = {'kernel':['linear','poly','sigmoid','rbf'], #{'linear','poly','sigmoid','rbf'}
+              'coef0' : [0], # float, default = 0
+              'tol' : [.001], #float, default = 0.001
+              'degree':[3], # used in poly ,ignored by other kernels
+              'gamma': [0.0001, 0.001], # float,default= 'auto'
+              'C': [0.1, 1], # float, default = 1
+              'epsilon': [0.0001, 0.0005, ] # float default = 0.1    
+        }
+
+regressor_svr =SVR(kernel='linear')
+random_search_svr = RandomizedSearchCV(estimator = regressor_svr_lin,
+                           param_distributions = parameters,
+                           scoring = scoring_mech,
+                           cv = cross_validation_value,
+                           n_jobs = -1)
+random_search_svr = random_search_svr.fit(x, y)
+score_svr_random= abs(random_search_svr.best_score_)
+bestparam_svr_random = random_search_svr.best_params_
+         
+
+
+
+
+# FEATURES IMPORTANCE
+
+
+# Features Importance
+importances=pd.Series(classifier_rf.feature_importances_, index=X_train.columns)
+importances.plot(kind='barh', figsize=(12,8))
+                                    
+
+
+
+# create submission file
+ pred = grid_search_rf.predict(dataset_test)
+ submission = pd.DataFrame(data=[], columns=['Item_Identifier', 'Outlet_Identifier', 'Item_Outlet_Sales'])
+ submission['Item_Identifier'] = dataset_test1['Item_Identifier']
+ submission['Outlet_Identifier'] = dataset_test1['Outlet_Identifier']
+ submission['Item_Outlet_Sales'] = pred
+ submission.to_csv('submission.csv', index=False)
+
+
+
