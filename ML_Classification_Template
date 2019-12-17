@@ -1,0 +1,959 @@
+#Machine Learning Model (General)
+
+#  1.  Fitting Data to Logistic Regression
+
+from sklearn.linear_model import LogisticRegression
+classifier_logreg = LogisticRegression(random_state = 0)
+classifier_logreg.fit(x_train,y_train)
+
+# Predicting the Test set results for Logistic Regression
+
+y_pred_logreg = classifier_logreg.predict(x_cv)
+
+
+# Making the Confusion Matrix for Logistic Regression
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_logreg=confusion_matrix(y_cv,y_pred_logreg)
+accuracy_logreg = accuracy_score(y_cv, y_pred_logreg)
+print (accuracy_logreg)
+
+
+# 2. Fitting K-NN to the Training set
+
+from sklearn.neighbors import KNeighborsClassifier
+classifier_knn = KNeighborsClassifier(n_neighbors = 5, metric = 'minkowski', p = 2)
+classifier_knn.fit(x_train, y_train)
+
+# Predicting the Test set results for KNN
+
+y_pred_knn = classifier_knn.predict(x_cv)
+
+
+# Making the Confusion Matrix for KNN
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_knn=confusion_matrix(y_cv,y_pred_knn)
+accuracy_knn = accuracy_score(y_cv, y_pred_knn)
+print (accuracy_knn)
+
+
+
+# 3. Fitting Linear SVM to the Training set (change kernel to tune hyperparameters)
+
+from sklearn.svm import SVC
+classifier_linsvm = SVC(kernel = 'linear', random_state = 0)         #  change the kernel to rbf
+classifier_linsvm.fit(x_train, y_train)
+
+# Predicting the Test set results for Support Vector Machine
+
+y_pred_linsvm = classifier_linsvm.predict(x_cv)
+
+
+# Making the Confusion Matrix for Support Vector Machine
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_linsvm=confusion_matrix(y_cv,y_pred_linsvm)
+accuracy_linsvm = accuracy_score(y_cv, y_pred_linsvm)
+print (accuracy_linsvm)
+
+
+
+# 4. Fitting Naive Bayes to the Training set
+
+from sklearn.naive_bayes import GaussianNB
+classifier_nb = GaussianNB()
+classifier_nb.fit(x_train, y_train)
+
+# Predicting the Test set results for Naive Bayes
+
+y_pred_nb = classifier_nb.predict(x_cv)
+
+
+# Making the Confusion Matrix for Naive Bayes
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_nb=confusion_matrix(y_cv,y_pred_nb)
+accuracy_nb = accuracy_score(y_cv, y_pred_nb)
+print (accuracy_nb)
+
+
+# 5. Fitting Decision Tree Classification to the Training set
+
+from sklearn.tree import DecisionTreeClassifier
+classifier_dectree = DecisionTreeClassifier(criterion = 'entropy', random_state = 0)
+classifier_dectree.fit(x_train, y_train)
+
+
+# Predicting the Test set results for DecisionTree 
+
+y_pred_dectree = classifier_dectree.predict(x_cv)
+
+
+# Making the Confusion Matrix for Decision Tree
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_dectree=confusion_matrix(y_cv,y_pred_dectree)
+accuracy_dec_tree= accuracy_score(y_cv, y_pred_logreg)
+print (accuracy_dec_tree)
+
+
+# 6. Fitting Random Forest Classification to the Training set
+
+from sklearn.ensemble import RandomForestClassifier
+classifier_rf = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 0)
+classifier_rf.fit(x_train, y_train)
+
+
+# Predicting the Test set results  for Random Forest
+
+y_pred_rf = classifier_rf.predict(x_cv)
+
+
+# Making the Confusion Matrix
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_rf=confusion_matrix(y_cv,y_pred_rf)
+accuracy_rf = accuracy_score(y_cv, y_pred_rf)
+print (accuracy_rf)
+
+
+#  7.  Fitting Data to XGBoost
+
+from xgboost import XGBClassifier
+from sklearn.metrics import accuracy_score
+classifier_xgb = XGBClassifier()
+classifier_xgb.fit(x_train, y_train)
+
+# make predictions for test data
+
+y_pred_xgb = classifier_xgb.predict(x_cv)
+y_pred_xgb = [round(value) for value in y_pred_xgb]
+
+# Making confusion matrix
+
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+cm_xgb=confusion_matrix(y_cv,y_pred_xgb)
+accuracy_xgb = accuracy_score(y_cv, y_pred_xgb)
+print (accuracy_xgb)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Machine Learning Model (K Fold CV)
+
+                      
+                        
+                        
+cross_vald=5
+
+# 1. Logistic Regression with K fold validation
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_logreg_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_logreg_kfold = LogisticRegression(random_state=0)
+    classifier_logreg_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_logreg_kfold = classifier_logreg_kfold.predict(xvl)
+    
+    # Summing all the accuracies
+    
+    accuracy_logreg_kfold += accuracy_score(yvl,y_pref_logreg_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_logreg_kfold/=cross_vald
+print (accuracy_logreg_kfold)
+
+
+
+# 2.K-NN with K fold validation
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_knn_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_knn_kfold = KNeighborsClassifier()
+    classifier_knn_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_knn_kfold = classifier_knn_kfold.predict(xvl)
+    
+    # Summing all the accuracies
+    
+    accuracy_knn_kfold += accuracy_score(yvl,y_pref_knn_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_knn_kfold/=cross_vald
+print (accuracy_knn_kfold)
+
+
+# 3.Linear SVM with K fold validation
+
+from sklearn.svm import SVC
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_linsvm_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_linsvm_kfold = SVC(kernel = 'linear', random_state = 0) 
+    classifier_linsvm_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_linsvm_kfold = classifier_linsvm_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_linsvm_kfold += accuracy_score(yvl,y_pref_linsvm_kfold)
+    
+# Taking the average of K fold    
+  
+accuracy_linsvm_kfold/=cross_vald       
+print (accuracy_linsvm_kfold)
+
+
+
+# 4. Naive Bayes with K fold validation
+
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_nb_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_nb_kfold = GaussianNB()
+    classifier_nb_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_nb_kfold = classifier_nb_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_nb_kfold += accuracy_score(yvl,y_pref_nb_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_nb_kfold/=cross_vald
+print (accuracy_nb_kfold)
+
+
+
+# 5. Decision Tree with K fold validation
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_dectree_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_dectree_kfold = DecisionTreeClassifier()
+    classifier_dectree_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_dectree_kfold = classifier_dectree_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_dectree_kfold += accuracy_score(yvl,y_pref_dectree_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_dectree_kfold/=cross_vald
+print (accuracy_dectree_kfold)
+
+
+
+
+# 6. Random Forest with K fold validation
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_rf_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_rf_kfold = RandomForestClassifier()
+    classifier_rf_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_rf_kfold = classifier_rf_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_rf_kfold += accuracy_score(yvl,y_pref_rf_kfold)
+   
+    
+# Taking the average of K fold    
+    
+accuracy_rf_kfold/=cross_vald
+print (accuracy_rf_kfold)
+
+
+# 7. XGBoost with K fold validation
+
+from xgboost import XGBClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_xgb_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_xgb_kfold = XGBClassifier()
+    classifier_xgb_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_xgb_kfold = classifier_xgb_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_xgb_kfold += accuracy_score(yvl,y_pref_xgb_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_xgb_kfold/=cross_vald
+print (accuracy_xgb_kfold)
+
+
+#  8.  Stochastic Gradient Descent with K fold validation
+
+from sklearn.linear_model import SGDClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_sgdc_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_sgdc_kfold = SGDClassifier()
+    classifier_sgdc_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_sgdc_kfold = classifier_sgdc_kfold.predict(xvl)
+
+    
+    # Summing all the accuracies    
+    accuracy_sgdc_kfold += accuracy_score(yvl,y_pref_sgdc_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_sgdc_kfold/=cross_vald
+print (accuracy_sgdc_kfold)
+
+
+
+#  9.  Light Gradient Boosting Machines with K fold validation
+
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_lgbm_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_lgbm_kfold = LGBMClassifier()
+    classifier_lgbm_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_lgbm_kfold = classifier_lgbm_kfold.predict(xvl)
+    
+    # Summing all the accuracies    
+    accuracy_lgbm_kfold += f1_score(yvl,y_pref_lgbm_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_lgbm_kfold/=cross_vald
+print (accuracy_lgbm_kfold)
+
+
+
+
+#F1 Score, Auc_Roc_Score,Accuracy Score
+
+# Special Conditions
+
+accuracy_rf_kfold=0
+f1score_rf_kfold=0
+rocscore_rf_kfold=0
+
+
+# Random Forest with K fold validation
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score,f1_score
+kf = StratifiedKFold(n_splits=5,random_state=1,shuffle=True)
+accuracy_rf_kfold=0
+f1score_rf_kfold=0
+rocscore_rf_kfold=0
+for train_index,test_index in kf.split(x,y):
+
+    # Fitting the data into model
+    
+    xtr,xvl = x.loc[train_index],x.loc[test_index]
+    ytr,yvl = y[train_index],y[test_index]
+    classifier_rf_kfold = RandomForestClassifier()
+    classifier_rf_kfold.fit(xtr, ytr)
+    
+    # Predicting the test set result for 
+
+    y_pref_rf_kfold = classifier_rf_kfold.predict(xvl)
+    
+    # Summing all the accuracies 
+    
+    accuracy_rf_kfold += accuracy_score(yvl,y_pref_rf_kfold)
+    f1score_rf_kfold += f1_score(yvl,y_pref_rf_kfold)
+    rocscore_rf_kfold += roc_auc_score(yvl,y_pref_rf_kfold)
+    
+# Taking the average of K fold    
+    
+accuracy_rf_kfold/=cross_vald
+f1score_rf_kfold/=cross_vald
+rocscore_rf_kfold/=cross_vald
+
+print (accuracy_rf_kfold)
+print (f1score_rf_kfold)
+print (rocscore_rf_kfold)
+
+
+#Machine Learning Model (GRID SEARCH)
+
+
+cross_vald = 5
+scoring_mec = 'accuracy'
+
+
+
+# 1. Grid Search with Logistic Regression 
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+parameters = [{ 
+    
+'C': [1], # penalty parameter, float ,default = 1 
+'class_weight':[None],  #  same
+'fit_intercept': [True],  # default = True
+'intercept_scaling': [1], # Float ,default = 1
+'max_iter' : [100], # Maximum number of iterations taken for the solvers to converge. default = 100
+'penalty':['l2'],  # { l1,l2 }  , default = l2
+'random_state' : [0],
+'solver' : ['warn'],#{‘newton-cg’, ‘lbfgs’, ‘liblinear’, ‘sag’, ‘saga’} , default = 'liblinear'
+'tol':[.0001] # Stopping criteria , float,default = .0001
+
+                            }]
+classifier_logreg = LogisticRegression(random_state = 0)
+grid_search_logreg = GridSearchCV(estimator = classifier_logreg,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_logreg = grid_search_logreg.fit(x, y)
+accuracy_logreg_grid= grid_search_logreg.best_score_
+bestparam_logreg_grid = grid_search_logreg.best_params_
+print (accuracy_logreg_grid)
+print (bestparam_logreg_grid)
+
+
+
+# 2. Grid Search with KNN
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV
+parameters = [{
+        
+'n_neighbors':[5],# int , default = 5, no of neighbours used by the classifier
+'leaf_size':[30],# Leaf size passed to BallTree or KDTree, int , default = 30
+'algorithm':['auto'],# {‘auto’, ‘ball_tree’, ‘kd_tree’, ‘brute’}, default = auto (decide best algo)
+'metric':['minkowski'],# default = 2
+'metric_params' : [None], # default = None
+'p' : [2], # default = 2
+'weights' : ['uniform']#{'uniform','distance'}, default = uniform
+                                       }]
+classifier_knn = KNeighborsClassifier()
+grid_search_knn = GridSearchCV(estimator = classifier_knn,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_knn = grid_search_knn.fit(x, y)
+accuracy_knn_grid= grid_search_knn.best_score_
+bestparam_knn_grid = grid_search_knn.best_params_
+print (accuracy_knn_grid)
+print (bestparam_knn_grid)
+
+
+
+# 3. Grid Search with SVM
+
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV
+parameters ={
+        
+'C': [1],# penalty parameter, float ,default = 1 
+'cache_size': [200], # size of the kernel cache (in MB), float
+'class_weight':[None], # same
+'coef0' : [0], # significant in ‘poly’ and ‘sigmoid’ , float , default = 0
+'decision_function_shape' : ['ovr'],  #{'ovo','ovr'} default = ovr
+'degree':[3],# Degree of the polynomial kernel , int ,default  = 3
+'kernel': ['linear'], #{‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’}
+'max_iter':[-1],# int, -1 for no limit
+'probability':[False], # Boolean, default = False
+'shrinking' : [True], # boolean , default = True
+'tol': [.001]# Stopping criteria , float,default = .0001
+                                      
+             }
+classifier_linsvm = SVC(random_state = 0)         #  change the kernel to rbf
+grid_search_linsvm = GridSearchCV(estimator = classifier_linsvm,
+                           param_grid = parameters,
+                           scoring =scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_linsvm = grid_search_linsvm.fit(x, y)
+accuracy_linsvm_grid= grid_search_linsvm.best_score_
+bestparam_linsvm_grid = grid_search_linsvm.best_params_
+print(accuracy_linsvm_grid)
+print(bestparam_linsvm_grid)
+
+
+
+
+
+
+# 5. Grid Search with Decision Tree
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+'class_weight':[None],# same
+'criterion':['gini'], # {'gini', 'entropy'}, function to measure the quality of a split , def= 'gini'
+'max_features': [None],# {'auto', 'sqrt', 'log2'}
+'max_depth' : [None], # int , default = None
+'max_leaf_nodes' : [None], # int , default = None
+'min_impurity_decrease' : [0.0], # Float, default  = 0
+'min_impurity_split' : [None],# Float, default = 0.0000001
+'min_samples_leaf':[1], # int , default = 1
+'min_samples_split': [2], # int , default = 2
+'min_weight_fraction_leaf' : [0],# float ,default = 0
+'splitter' : ['best'], # {'best','random'}
+'presort' : [False],
+
+                                }
+
+classifier_dectree = DecisionTreeClassifier(random_state = 0)
+grid_search_dectree = GridSearchCV(estimator = classifier_dectree,
+                           param_grid = parameters,
+                           scoring =scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_dectree = grid_search_dectree.fit(x, y)
+accuracy_dectree_grid= grid_search_dectree.best_score_
+bestparam_dectree_grid = grid_search_dectree.best_params_
+print(accuracy_dectree_grid)
+print(bestparam_dectree_grid)
+
+
+
+# 6. Grid Search with Random Forest
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters= {
+'bootstrap': [True],# boolean, default = True
+'class_weight' : [None],
+'criterion':['gini'],# {'gini', 'entropy'}, function to measure the quality of a split , def= 'gini'
+'n_estimators':[10],# int , default = 10, The number of trees in the forest.
+'max_depth' : [None],# int , default = None
+'max_features':['auto'], # {'auto', 'sqrt', 'log2'}
+'max_leaf_nodes': [None],# int , default = None
+'min_impurity_decrease' : [0.0], # Float, default  = 0
+'min_impurity_split' : [None],# int , default = 2
+'min_samples_leaf'  : [1],# int , default = 1
+'min_samples_split': [2], # int , default = 2
+'min_weight_fraction_leaf': [0.0]# float ,default = 0
+                                    }
+
+classifier_rf = RandomForestClassifier(random_state = 0)
+grid_search_rf = GridSearchCV(estimator = classifier_rf,
+                           param_grid = parameters,
+                           scoring =scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_rf = grid_search_rf.fit(x, y)
+accuracy_rf_grid = grid_search_rf.best_score_
+bestparam_rf_grid = grid_search_rf.best_params_
+print(accuracy_rf_grid)
+print(bestparam_rf_grid)
+
+
+
+# 7. Grid Search with XGBoost
+
+from xgboost import XGBClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+'base_score' : [0.5],# defrault = 0.5
+'booster' : ['gbtree'], # {gbtree,gblinear,dart} 
+'colsample_bylevel' : [1],# default = 1, rane(0.00001,1)
+'colsample_bytree' : [1],# default = 1, rane(0.00001,1)
+'gamma' : [0],# default = 0 range (0,infinity)
+'learning_rate' : [0.1], # default =.3, range(0,1)
+'max_depth' : [3], # default = 6, range(0,infinity),Increasing this value will make the model more complex and more likely to overfit.
+'max_delta_step' : [0], # default = 0,range(0,infinity)
+'min_child_weight' : [1],# default = 1,range(0,infinity)
+'n_estimators' : [100],# int , default = 10, The number of trees in the forest.
+'nthread'  : [None],# same
+'objective' : ['binary:logistic'],# very important parameter check documentation
+'reg_alpha'  : [0], #default = 0
+'reg_lambda' : [1], # default = 1
+'scale_pos_weight' : [1], # default = 1
+'seed' : [None], #default = 0 , random number seed
+'silent' : [True],# same
+'subsample' : [1],# default = 1 ,range(0,1)
+
+                                        }
+
+classifier_xgb = XGBClassifier()
+grid_search_xgb = GridSearchCV(estimator = classifier_xgb,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_xgb = grid_search_xgb.fit(x, y)
+accuracy_xgb_grid = grid_search_xgb.best_score_
+bestparam_xgb_grid = grid_search_xgb.best_params_
+print(accuracy_xgb_grid)
+print(bestparam_xgb_grid)
+
+
+
+
+
+# 8. Grid Search with SGDC
+
+from sklearn.linear_model import SGDClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+'alpha' : [0.0001],# float ,default =.0001, regularization term
+'average' : [False],# same
+'class_weight' : [None], # same
+'early_stopping': [False], # terminate training when validation score is not improving by at least tol 
+'epsilon' : [0.1],#float
+'eta0' : [0.0],# float ,default = 0
+'fit_intercept' : [True,],# boolean ,default = True
+'l1_ratio' : [0.15],# float ,default = 0.15
+'learning_rate' : ['optimal'], # {‘invscaling’,'optimal',‘adaptive’}
+'loss' : ['hinge'],# check documentation
+'max_iter' : [None],# int, default = 1000
+'n_iter' : [None], # same
+'n_iter_no_change' : [5], # default = 5
+'n_jobs' : [-1], # -1 for all cpus
+'penalty' : ['l2'],#{'l1', 'l2', 'elasticnet',None}
+'power_t' : [0.5], # same
+'shuffle' : [True],# boolean , default = True
+'tol' : [None],# termination crietera , default = .001
+'validation_fraction' : [0.1],# float , default = .1
+'verbose' : [0],# same
+'warm_start' : [False] # same
+
+                                        }
+classifier_sgdc = SGDClassifier()
+grid_search_sgdc = GridSearchCV(estimator = classifier_sgdc,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_sgdc = grid_search_sgdc.fit(x, y)
+accuracy_sgdc_grid = grid_search_sgdc.best_score_
+bestparam_sgdc_grid = grid_search_sgdc.best_params_
+print(accuracy_sgdc_grid)
+print(bestparam_sgdc_grid)
+
+
+# 9. Grid Search with LIGHT_GadientBoostingM
+
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import GridSearchCV
+
+
+parameters = {
+'boosting_type':['gbdt'],# {'gbdt','dart','rf','goss'}
+'class_weight':[None], # same
+'colsample_bytree' : [1.0],# float,default : 1
+'importance_type':['split'], # same
+'learning_rate':[0.1],# float ,default =.1
+'max_depth':[-1], # int ,default = -1
+'min_child_samples' : [20], # int , default = 20
+'min_child_weight' : [0.001], # float, default =.0001
+'min_split_gain' : [0.0],# float, default = 0
+'n_estimators'  : [100], # int  , default = 100
+'num_leaves' : [31],# int ,default= 31
+'random_state' : [None],# same
+'reg_alpha' : [0.0],# float, default : 0
+'reg_lambda' : [0.0],# float, default : 0
+'silent' : [True],# same
+'subsample' : [1.0],# float, default =1
+'subsample_for_bin' : [200000],# int ,default = 200000
+'subsample_freq' : [0] # same
+        
+        }
+
+
+classifier_lgbm = LGBMClassifier()
+grid_search_lgbm = GridSearchCV(estimator = classifier_lgbm,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_lgbm = grid_search_lgbm.fit(x, y)
+accuracy_lgbm_grid = grid_search_lgbm.best_score_
+bestparam_lgbm_grid = grid_search_lgbm.best_params_
+print(accuracy_lgbm_grid)
+print(bestparam_lgbm_grid)
+
+
+
+
+
+
+
+
+
+
+
+# 10. Grid Search with ADABoost
+
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+'n_estimators':[100,200,5000],
+'learning_rate':[.5,1]
+}
+
+base_model=DecisionTreeClassifier(max_depth=5)
+classifier_adab = AdaBoostClassifier()
+grid_search_adab = GridSearchCV(estimator = classifier_adab,
+                           param_grid = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+grid_search_adab = grid_search_adab.fit(x, y)
+accuracy_adab_grid = grid_search_adab.best_score_
+bestparam_adab_grid = grid_search_adab.best_params_
+print(accuracy_adab_grid)
+print(bestparam_adab_grid)
+
+
+# 11. Grid Search with CATBoost
+
+from catboost import CatBoostClassifier
+from sklearn.model_selection import GridSearchCV
+
+parameters = {
+              'loss_function':['RMSE'], #
+              'iterations' :[50],
+              'learning_rate': [0.3], # Float ,default : .03
+              'l2_leaf_reg' :[3],    #Lambda, default : 3
+             # 'bootstrap_type' : ['bayesian'],
+             # 'bagging_temperature' : [1], # default  : 1,  (0,infinity) float
+             # 'subsample':[.66],  # Float,
+             'sampling_frequency': ['PerTree','PerTreeLevel'],
+              'depth':[6], # int , default =6 , range(1,16)
+              'min_data_in_leaf' : [1], # default : 1 
+              'max_leaves' : [31], #int , default : 31 , range(1,64)  not more than 64 is recommended
+             # 'scale_pos_weight' : [1],# Float, default : 1
+            #  'boosting_type' ['Ordered'], # ['Ordered ','Plain']
+           #   'early_stopping_rounds' : [False], # int , 
+
+              }
+
+classifier_catb = CatBoostClassifier()
+grid_search_catb = GridSearchCV(estimator = classifier_catb,
+                           param_grid = parameters,
+                           scoring="roc_auc",
+                           cv = cross_vald)
+grid_search_catb = grid_search_catb.fit(x, y)
+accuracy_catb_grid = grid_search_catb.best_score_
+bestparam_catb_grid = grid_search_catb.best_params_
+print(accuracy_catb_grid)
+print(bestparam_catb_grid)
+
+
+                
+              
+
+
+              # Feature Importance (Random Forest)
+
+
+
+
+# Features Importance Random Forest
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix,accuracy_score,roc_auc_score
+classifier_rf=RandomForestClassifier(n_estimators=100)
+classifier_rf.fit(x, y)
+importances=pd.Series(classifier_rf.feature_importances_, index=x.columns).sort_values()
+importances1=importances[:10,]
+importances1.plot(kind='barh', figsize=(20,15))
+
+
+
+
+# Random Search
+
+
+
+# 10.1 Random Search with ADABoost
+
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import RandomizedSearchCV
+
+parameters = {
+'n_estimators':[100,200],  #int, default = 50
+'learning_rate':[.5,1], #Float ,default = 1
+'algorithm' : ['SAMME', 'SAMME.R'],
+}
+
+base_model=DecisionTreeClassifier(max_depth=5)
+classifier_adab = AdaBoostClassifier()
+rand_search_adab = RandomizedSearchCV(estimator = classifier_adab,
+                         param_distributions = parameters,
+                           scoring = scoring_mec,
+                           cv = cross_vald,
+                           n_jobs = -1)
+rand_search_adab = rand_search_adab.fit(x, y)
+accuracy_adab_rand = rand_search_adab.best_score_
+bestparam_adab_rand = rand_search_adab.best_params_
+print(accuracy_adab_rand)
+print(bestparam_adab_rand)
+
+
+
+AUC Curve (General)
+
+
+
+# create multiple AUC curve in one graph
+
+from sklearn import metrics
+import numpy as np
+import matplotlib.pyplot as plt
+
+fpr, tpr, thresh = metrics.roc_curve(y_cv,  y_pred_rf)
+auc = metrics.roc_auc_score(y_cv,  y_pred_rf)
+plt.plot(fpr,tpr,label="Random Forest, auc="+str(auc))
+
+fpr, tpr, thresh = metrics.roc_curve(y_pred_rf,  y_pred_rf)
+auc = metrics.roc_auc_score(y_pred_rf,  y_pred_rf)
+plt.plot(fpr,tpr,label="Logistic Regression, auc="+str(auc))
+
+plt.legend(loc=4)
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.show()
+
+
+
+# Creating final submission file for general and knn
+
+pred_test =grid_search_knn.predict(dataset_test)
+
+submission=pd.read_csv("gender_submission_2.csv")
+
+submission['Survived']=pred_test 
+
+pd.DataFrame(submission, columns=['PassengerId','Survived']).to_csv('sub_file_gen.csv')
+
+
+
+
+
+# Creating final submission file for grid search cv
+
+grid_search_knn.best_estimator_.fit(x, y)
+
+pred_test = grid_search_knn.best_estimator_.predict(dataset_test)  
+
+submission=pd.read_csv("gender_submission_2.csv")
+
+submission['Survived']=pred_test 
+
+pd.DataFrame(submission, columns=['PassengerId','Survived']).to_csv('sub_file_gridsearch.csv')
